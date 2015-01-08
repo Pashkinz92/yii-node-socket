@@ -41,9 +41,16 @@ $> git submodule update
 
 ```php
 'nodeSocket' => array(
-	'class' => 'application.extensions.yii-node-socket.lib.php.NodeSocket',
-	'host' => 'localhost',	// по умолчанию 127.0.0.1, может быть как ip так и доменом, только без http
-	'port' => 3001		// по умолчанию 3001, должен быть целочисленным integer-ом
+	'nodeSocket' => array(
+            'class' => 'application.extensions.yii-node-socket.lib.php.NodeSocket',
+            'host' => 'localhost',  // default is 127.0.0.1, can be ip or domain name, without http
+            'port' => 3005,      // default is 3001, should be integer
+            'checkClientOrigin'=>false,
+            'ssl'=>false, // 'using ssl',
+            'sslCert'=>'/var/<полный путь к crt файлу>',
+            'sslKey'=>'/var/<полный путь к privat.key>',
+            'sslCA'=>'/var/<полный путь к ca_2.crt>',
+        ),
 )
 ```
 > Notice: ***host*** - имя домена, как в вашем виртуальном хосте либо айпи адресс сервера, если вы обращаетесь к серверу через айпи адресс
