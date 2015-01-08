@@ -2,7 +2,7 @@
 require_once 'frames/IFrameFactory.php';
 require_once 'frames/FrameFactory.php';
 
-class NodeSocket extends CApplicationComponent {
+class NodeSocket extends CApplicationComponent{
 
 	/**
 	 * Node js server host to bind http and socket server
@@ -103,6 +103,31 @@ class NodeSocket extends CApplicationComponent {
 	 */
 	protected $_db;
 
+    /**
+     * @var using ssl
+     */
+
+    public $ssl = false;
+
+    /**
+     * @var sertificat
+     */
+    public $sslCert = null;
+
+    /**
+     * @var ssl Key
+     */
+
+    public $sslKey = null;
+
+    /**
+     * @var ssl CA
+     */
+
+    public $sslCA = null;
+
+
+
 	public function init() {
 		parent::init();
 		require_once __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array(
@@ -144,13 +169,18 @@ class NodeSocket extends CApplicationComponent {
 	 * @return bool
 	 */
 	public function registerClientScripts() {
+        //return;
+
 		if ($this->_assetUrl) {
 			return true;
 		}
+
+        Yii::app()->assetManager->forceCopy=YII_DEBUG;
 		$this->_assetUrl = Yii::app()->assetManager->publish(__DIR__ . '/../js/client');
 		if ($this->_assetUrl) {
-			Yii::app()->clientScript->registerScriptFile(sprintf("http://%s:%d%s", $this->host, $this->port, '/socket.io/socket.io.js'));
-			Yii::app()->clientScript->registerScriptFile($this->_assetUrl . '/client.js');
+            
+			Yii::app()->clientScript->registerScriptFile(sprintf("//%s:%d%s", $this->host, $this->port, '/socket.io/socket.io.js'));
+			Yii::app()->clientScript->registerScriptFile(SITE_URL_.$this->_assetUrl . '/client.js');
 			return true;
 		}
 		return false;
